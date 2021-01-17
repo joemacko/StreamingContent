@@ -14,6 +14,8 @@ namespace RepositoryPattern_Tests
         private StreamingContentRepository _repo;
         private StreamingContent _content;
 
+        /* TestInitialize says that whatever method is within it should run at the
+        beginning of all unit tests. Must be a public method.*/
         [TestInitialize]
         public void Arrange()
         {
@@ -25,7 +27,9 @@ namespace RepositoryPattern_Tests
             _repo.AddContentToList(_content);
         }
 
-        // Add method
+        /* Add method. We need to verify content has been added, so we can use either
+        GetContentByTitle method or AddContentToList method.
+        */
         [TestMethod]
         public void AddToList_ShouldGetNotNull()
         {
@@ -35,10 +39,20 @@ namespace RepositoryPattern_Tests
             StreamingContentRepository repository = new StreamingContentRepository();
 
             // Act --> Get/run the code we want to test
+            /* Using the dot operator to add content to our new StreamingContentRepository
+            object, repository. Here we pass in the new StreamingContent object, content.*/
             repository.AddContentToList(content);
+
+            /* Creating a new StreamingContent object called contentFromDirectory to catch
+            the StreamingContentRepository object, repository's new properties, which we
+            retrieved from the GetContentByTitle method.*/
             StreamingContent contentFromDirectory = repository.GetContentByTitle("Toy Story");
 
             // Assert --> Use the assert class to verify the expected outcome
+            /* If the AddContentToList method worked, then "repository" should have had the 
+            title "Toy Story" stored into it. "contentFromDirectory" should have retrieved
+            the same repository object if the GetContentByTitle method worked. Therefore,
+            contentFromDirectory should not be null.*/
             Assert.IsNotNull(contentFromDirectory);
         }
 
@@ -48,17 +62,23 @@ namespace RepositoryPattern_Tests
         {
             // Arrange
             // TestInitialize
+            // This is the new (updated) content
             StreamingContent newContent = new StreamingContent("Rubber", "A car trye comes to life with the power" +
                 "to make people explode and goes on a murderous rampage through the California" +
                 "desert.", "R", 10, false, GenreType.RomCom);
 
             // Act
+            /* We're updating the actual content here using the original title and 
+            new StreamingContent object*/
             bool updateResult = _repo.UpdateExistingContent("Rubber", newContent);
 
             // Assert
+            /* Using the IsTrue method because the UpdateExistingContent method
+            returns a bool*/
             Assert.IsTrue(updateResult);
         }
 
+        // DataTestMethods allow data to be specified in-line with DataRows
         [DataTestMethod]
         [DataRow("Rubber", true)]
         [DataRow("Toy Story", false)]
@@ -81,6 +101,7 @@ namespace RepositoryPattern_Tests
         public void DeleteContent_ShouldReturnTrue()
         {
             // Arrange
+            // TestInitialize
 
             // Act
             bool deleteResult = _repo.RemoveContentFromList(_content.Title);
